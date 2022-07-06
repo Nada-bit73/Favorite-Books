@@ -1,0 +1,80 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="d-flex justify-content-center align-items-center container mb-3 mt-4">
+    <div class="row ml-5">
+            <div class="row ml-5 justify-content-center align-items-center">
+                <div class="span6">
+                    <form class="form align-items-cente text-center" action="/updateDesc/{{ book.id }}" method="POST">
+                        {% if user.id == book.upladed_by.id %}
+                    <div class="row align-items-center  mt-3 mb-2">
+                        <input type="text" name="newTitle" class="form-control" aria-describedby="desc"
+                            value="{{ book.title }}" required>
+                    </div>
+                    {% else %}
+                    <div class="row align-items-center mt-3 mb-2">
+                        <h1>{{ book.title }}</h1>
+                    </div>
+                    {% endif %}
+                    <div class="row mt-3">
+                        <h6>added by : {{ book.upladed_by.first_name }} {{ book.upladed_by.last_name }}</h6>
+                    </div>
+
+                    <div class="row mt-3">
+                        <h6>added on : {{ book.created_at }}</h6>
+                    </div>
+
+                    <div class="row mt-3">
+                        <h6>last update on : {{ book.updated_at }}</h6>
+                    </div>
+
+                    {% if user.id == book.upladed_by.id %}
+                        {% csrf_token %}
+                    <div class="row mt-3">
+                        <h6>description :</h6>
+                        <input type="text" name="newDesc" class="form-control" aria-describedby="desc"
+                            value="{{ book.desc }}" required>
+                    </div>
+                    <div class="d-flex justify-content-end mt-2 ml-2 mr-2">
+                        <button  class="btn btn-info mr-3" type="submit" value="post">
+                            update
+                        </button>
+                    </form>
+                    <form class="form align-items-cente text-center" action="/deleteBook/{{ book.id }}" method="POST">
+                        {% csrf_token %}
+                        <button class="btn btn-danger" type="submit" value="post">
+                            delete
+                        </button>
+                        </form>
+                    </div>
+               
+                    {% else %}
+                    <div class="row mt-3">
+                        <h6>description : {{ book.desc }}</h6>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if favBook %}
+                <div class="row ml-5 justify-content-right align-items-right">
+                    <div class="span6">
+                    <h2 class="form-heading mb-5">users who like this book</h2>
+                {% for i in favBook %}
+                        <ul>
+                            <li>{{ i.first_name }} {{ i.last_name }}
+                                {% if i.id == user.id %}
+                                <a type="submit" href="/unFav/{{ book.id }}" value="Submit Data">
+                                    un-favorite
+                                </a>
+                                {% endif %}
+                            </li>
+                        </ul>
+                   
+                    {% endfor %}
+                    </div>
+                </div>
+
+                {% endif %}
+            </div>
+    </div>
+</div>
+{% endblock %}

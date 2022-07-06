@@ -1,0 +1,47 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="d-flex justify-content-center align-items-center container mb-3 mt-4">
+    <div class="row ml-5">
+        <div class="span6">
+            <form class="form align-items-left text-left" action="/addBook" method="POST">
+                <h2 class="form-heading mb-5">add a favorite book</h2>
+                <div class="row mb-3">
+                    <label class="form-label">title</label>
+                    <div class="col-12">
+                        <input type="text" name="title" class="form-control" aria-describedby="title" required>
+                    </div>
+                </div>
+                {% csrf_token %}
+                <div class="row mb-3">
+                    <label class="form-label">description</label>
+                    <div class="col-12">
+                        <input type="text" name="desc" class="form-control" aria-describedby="desc" required>
+                    </div>
+                </div>
+                <button class="btn btn-large btn-dark" type="submit">add</button>
+            </form>
+        </div>
+            <div class="row ml-5 justify-content-right align-items-right">
+                <div class="span6">
+                <h2 class="form-heading mb-5">all books</h2>
+                {% for book in books %}
+                    <a href="/viewFavBook/{{ book.id }}">{{ book.title }}</a>
+                    <div class="row">
+                        <label class="form-label">( added by {{ book.upladed_by.first_name }} {{ book.upladed_by.last_name }} )</label>
+                    </div>
+                    {% if user in book.user_favs.all %} 
+                    <div class="row mb-4">
+                        <label class="form-label italic">this is one of your favorites</label>
+                    </div> 
+                    {% else %}
+                    <div class="row mb-4">
+                        <a href="/addFavBook/{{ book.id }}">add to favorite</a>
+                    </div> 
+                    {% endif %}
+            {% endfor %}
+                </div>
+            </div>
+        
+    </div>
+</div>
+{% endblock %}
